@@ -1,0 +1,76 @@
+from tkinter import *
+from tkinter import ttk
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+def calculate(*args):
+    try:
+        Length_Value = float(Length.get())
+        Width_Value = float(Width.get())
+        Height_Value = float(Height.get())
+
+        Surface_Area.set(round((2*Length_Value*Width_Value)+(2*Length_Value*Height_Value)+(2*Width_Value*Height_Value),2))
+        # The addtional "1" is so the top overlaps by an entire inch
+        Wrap_Length.set(round(1+((2*Width_Value)+(2*Height_Value)), 2))
+        # The additional "1" is so the ends overlap by half an inch
+        Wrap_Width.set(round(1+((Length_Value)+(Height_Value)), 2))
+
+    except ValueError:
+        pass
+
+root = Tk()
+root.title("Wrapping Paper Size")
+
+mainframe = ttk.Frame(root,padding="10 10 12 12")
+mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+root.columnconfigure(0, weight=1)
+root.rowconfigure(0, weight=1)
+
+# Defining the 3 required variables for this calculation
+Length = StringVar()
+Width = StringVar()
+Height = StringVar()
+
+# Setting the three variables into the application
+Length_entry = ttk.Entry(mainframe, width=15, textvariable=Length)
+Width_entry = ttk.Entry(mainframe, width=15, textvariable=Width)
+Height_entry = ttk.Entry(mainframe, width=15, textvariable=Height)
+
+Length_entry.grid(column=2, row=1, sticky=(W, E))
+Width_entry.grid(column=2, row=2, sticky=(W, E))
+Height_entry.grid(column=2, row=3, sticky=(W, E))
+
+# Answer to the Surface Area calculation
+Surface_Area = StringVar()
+ttk.Label(mainframe, textvariable=Surface_Area).grid(column=3, row=4, sticky=(W, E))
+
+# Answer to Wrap Area Calculation
+Wrap_Length = StringVar()
+Wrap_Width = StringVar()
+
+ttk.Label(mainframe, textvariable=(Wrap_Length)).grid(column=3, row=5, sticky=(W, E))
+ttk.Label(mainframe, textvariable=Wrap_Width).grid(column=3, row=6, sticky=(W, E))
+
+# Button 
+ttk.Button(mainframe,text="Calculate", command=calculate).grid(column=3, row=7, sticky=W)
+
+# Labeling the three variables
+ttk.Label(mainframe, text="Length").grid(column=3, row=1, sticky=W)
+ttk.Label(mainframe, text="Width").grid(column=3, row=2, sticky=W)
+ttk.Label(mainframe, text="Height").grid(column=3, row=3, sticky=W)
+
+# Labeling for the calculation
+ttk.Label(mainframe, text=" Box Surface Area =").grid(column=2, row=4, sticky=E)
+ttk.Label(mainframe, text=" Wrapping Paper Length =").grid(column=2, row=5, sticky=E)
+ttk.Label(mainframe, text=" Wrapping Paper Height =").grid(column=2, row=6, sticky=E)
+
+
+for child in mainframe.winfo_children(): 
+    child.grid_configure(padx=5, pady=5)
+
+
+Length_entry.focus()
+root.bind("<Return>", calculate)
+
+root.mainloop()
